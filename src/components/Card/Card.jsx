@@ -1,10 +1,12 @@
 import React from 'react';
 import styles from './Card.module.scss';
 
-const Card = ({ title, price, img, onClickButton }) => {
+const Card = ({ title, price, img, onFavourite, addToCart }) => {
+  const [isAdded, setIsAdded] = React.useState(false);
+
   return (
     <div className={styles.card}>
-      <div className={styles.favourite}>
+      <div className={styles.favourite} onClick={onFavourite}>
         <img src="/img/heart-unliked.svg" alt="Unliked" />
       </div>
       <img width={133} height={112} src={img} alt="Sneakers" />
@@ -14,9 +16,15 @@ const Card = ({ title, price, img, onClickButton }) => {
           <span>Цена:</span>
           <b>{price} руб.</b>
         </div>
-        <button className="button" onClick={onClickButton}>
-          <img width={11} height={11} src="/img/plus.svg" alt="Plus" />
-        </button>
+        <img
+          className={styles.plus}
+          src={!isAdded ? '/img/btn-plus.svg' : '/img/btn-checked.svg'}
+          alt="Add to cart"
+          onClick={() => {
+            setIsAdded(!isAdded);
+            addToCart(title, price, img, !isAdded);
+          }}
+        />
       </div>
     </div>
   );

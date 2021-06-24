@@ -1,26 +1,40 @@
 import React from 'react';
+import axios from 'axios';
 
 import Header from './components/Header';
 import Cart from './components/Cart';
 import Card from './components/Card/Card';
 
-const sneakers = [
-  { title: 'Мужские Кроссовки Nike Blazer Mid Suede', price: 12999, img: '/img/sneakers/1.jpg' },
-  { title: 'Мужские Кроссовки Nike Air Max 270', price: 15600, img: '/img/sneakers/2.jpg' },
-  { title: 'Мужские Кроссовки Nike Blazer Mid Suede', price: 13999, img: '/img/sneakers/3.jpg' },
-  {
-    title: 'Мужские Кроссовки Puma X Aka Boku Future Rider',
-    price: 12600,
-    img: '/img/sneakers/4.jpg',
-  },
-];
-
 function App() {
+  const [sneakers, setSneakers] = React.useState([]);
+  const [cartSneakers, setCartSneakers] = React.useState([]);
+  const [isCartOpened, setCartOpened] = React.useState(false);
+
+  React.useEffect(() => {
+    axios.get('https://60d4643061160900173cb128.mockapi.io/items').then((response) => {
+      setSneakers(response.data);
+    });
+  }, []);
+
+  const onOpenCart = () => {
+    setCartOpened(true);
+  };
+
+  const onCloseCart = () => {
+    setCartOpened(false);
+  };
+
+  const addToCart = (title, price, img, isAdded) => {
+    if (isAdded) {
+      const obj = { title, price, img };
+      setCartSneakers((prev) => [...prev, obj]);
+    }
+  };
+
   return (
     <div className="wrapper clear">
-      <Cart />
-
-      <Header />
+      {isCartOpened ? <Cart onCloseCart={onCloseCart} cartSneakers={cartSneakers} /> : null}
+      <Header onOpenCart={onOpenCart} />
       <div className="content p-40">
         <div className="d-flex align-center justify-between mb-40">
           <h1>Все кроссовки</h1>
@@ -30,16 +44,14 @@ function App() {
           </div>
         </div>
 
-        <div className="d-flex">
+        <div className="d-flex flex-wrap">
           {sneakers.map((item, idx) => (
             <Card
               key={idx}
               title={item.title}
               price={item.price}
               img={item.img}
-              onClickButton={(item) => {
-                console.log(item);
-              }}
+              addToCart={addToCart}
             />
           ))}
         </div>

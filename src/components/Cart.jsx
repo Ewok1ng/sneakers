@@ -2,19 +2,28 @@ import React from 'react';
 
 import CartItem from './CartItem';
 
-const Cart = () => {
+const Cart = ({ cartSneakers, onCloseCart }) => {
   return (
-    <div className="overlay" style={{ display: 'none' }}>
+    <div className="overlay">
       <div className="drawer">
         <h2 className="mb-30 d-flex justify-between">
           Корзина
-          <img className="removeBtn cu-p" src="/img/btn-remove.svg" alt="remove" />
+          <img
+            className="removeBtn cu-p"
+            src="/img/btn-remove.svg"
+            alt="remove"
+            onClick={onCloseCart}
+          />
         </h2>
         <div className="items">
-          <CartItem />
-          <CartItem />
-          <CartItem />
-          <CartItem />
+          {cartSneakers.map((item) => (
+            <CartItem
+              key={`${item.title}_${item.price}`}
+              title={item.title}
+              price={item.price}
+              img={item.img}
+            />
+          ))}
         </div>
         <ul className="cartTotalBlock">
           <li className="d-flex justify-between">
