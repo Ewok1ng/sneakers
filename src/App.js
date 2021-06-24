@@ -26,8 +26,19 @@ function App() {
 
   const addToCart = (title, price, img, isAdded) => {
     if (isAdded) {
+      console.log(isAdded);
       const obj = { title, price, img };
       setCartSneakers((prev) => [...prev, obj]);
+    }
+    if (!isAdded) {
+      const arr = cartSneakers;
+
+      arr.forEach((item, idx) => {
+        if (item.title === title && item.price === price && item.img === img) {
+          arr.splice(idx, 1);
+        }
+      });
+      setCartSneakers([...arr]);
     }
   };
 
