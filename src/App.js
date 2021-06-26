@@ -14,6 +14,7 @@ function App() {
   React.useEffect(() => {
     axios.get('https://60d4643061160900173cb128.mockapi.io/items').then((response) => {
       setSneakers(response.data);
+      setCartSneakers(response.data.filter((item) => item.isAddedToCart === true));
     });
   }, []);
 
@@ -25,31 +26,29 @@ function App() {
     setCartOpened(false);
   };
 
-  const addToCart = (title, price, img, isAdded) => {
-    if (isAdded) {
-      const obj = { title, price, img };
-      setCartSneakers((prev) => [...prev, obj]);
-    }
-    if (!isAdded) {
-      const arr = cartSneakers;
+  const addToCart = (id) => {
+    const obj = sneakers.filter((item) => item.id === id)[0];
 
-      arr.forEach((item, idx) => {
-        if (item.title === title && item.price === price && item.img === img) {
-          arr.splice(idx, 1);
-        }
-      });
-      setCartSneakers([...arr]);
-    }
+    if (obj.isAddedToCart) return;
+
+    obj.isAddedToCart = true;
+    setCartSneakers((prev) => [...prev, obj]);
+    setSneakers((prev) => [...prev, obj]);
+    axios.put(`https://60d4643061160900173cb128.mockapi.io/items/${id}`, obj);
   };
 
-  const removeFromCart = (title, price, img) => {
-    const arr = cartSneakers;
-    arr.forEach((item, idx) => {
-      if (item.title === title && item.price === price && item.img === img) {
-        arr.splice(idx, 1);
+  const removeFromCart = (id) => {
+    const newCartSneakers = cartSneakers.filter((item) => item.id !== id);
+    const newSneakers = JSON.parse(JSON.stringify(sneakers));
+    newSneakers.forEach((element) => {
+      if (element.id === id) {
+        element.isAddedToCart = false;
+        axios.put(`https://60d4643061160900173cb128.mockapi.io/items/${id}`, element);
       }
     });
-    setCartSneakers([...arr]);
+
+    setCartSneakers(newCartSneakers);
+    setSneakers(newSneakers);
   };
 
   const onChangeInputValue = (event) => {
@@ -90,13 +89,16 @@ function App() {
 
         <div className="d-flex flex-wrap">
           {sneakers
-            .filter((product) => product.title.toLowerCase().includes(searchValue.toLowerCase()))
+            .filter((product) => product?.title.toLowerCase().includes(searchValue.toLowerCase()))
             .map((item, idx) => (
               <Card
                 key={`${idx}_${item.title}`}
+                id={item.id}
                 title={item.title}
                 price={item.price}
                 img={item.img}
+                isFavourite={item.isFavourite}
+                isAddedToCart={item.isAddedToCart}
                 addToCart={addToCart}
               />
             ))}

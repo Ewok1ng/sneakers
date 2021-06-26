@@ -18,7 +18,8 @@ const Cart = ({ cartSneakers, onCloseCart, removeFromCart }) => {
         <div className="items">
           {cartSneakers.map((item) => (
             <CartItem
-              key={`${item.title}_${item.price}`}
+              key={item.id}
+              id={item.id}
               title={item.title}
               price={item.price}
               img={item.img}
