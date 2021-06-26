@@ -2,7 +2,7 @@ import React from 'react';
 
 import CartItem from './CartItem';
 
-const Cart = ({ cartSneakers, onCloseCart }) => {
+const Cart = ({ cartSneakers, onCloseCart, removeFromCart }) => {
   return (
     <div className="overlay">
       <div className="drawer">
@@ -22,6 +22,7 @@ const Cart = ({ cartSneakers, onCloseCart }) => {
               title={item.title}
               price={item.price}
               img={item.img}
+              removeFromCart={removeFromCart}
             />
           ))}
         </div>
