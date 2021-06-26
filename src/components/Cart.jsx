@@ -2,7 +2,7 @@ import React from 'react';
 
 import CartItem from './CartItem';
 
-const Cart = ({ cartSneakers, onCloseCart, removeFromCart }) => {
+const Cart = ({ total, cartSneakers, onCloseCart, removeFromCart }) => {
   return (
     <div className="overlay">
       <div className="drawer">
@@ -31,12 +31,12 @@ const Cart = ({ cartSneakers, onCloseCart, removeFromCart }) => {
           <li className="d-flex justify-between">
             <span>Итого: </span>
             <div></div>
-            <b>21 498 руб.</b>
+            <b>{new Intl.NumberFormat('ru-RU').format(total)} руб.</b>
           </li>
           <li className="d-flex justify-between">
             <span>Налог 5%: </span>
             <div></div>
-            <b>1074 руб.</b>
+            <b>{new Intl.NumberFormat('ru-RU').format(Math.round(total * 5) / 100)} руб.</b>
           </li>
         </ul>
         <button className="greenBtn greenBtn--right">

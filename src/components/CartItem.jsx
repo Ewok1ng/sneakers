@@ -6,7 +6,7 @@ const CartItem = ({ id, title, price, img, removeFromCart }) => {
       <img className="mr-20" width={70} height={70} src={img} alt="sneakers" />
       <div className="mr-10">
         <p className="mb-5">{title}</p>
-        <b>{price} руб.</b>
+        <b>{new Intl.NumberFormat('ru-RU').format(price)} руб.</b>
       </div>
       <img
         className="removeBtn"

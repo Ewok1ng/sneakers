@@ -10,6 +10,7 @@ function App() {
   const [cartSneakers, setCartSneakers] = React.useState([]);
   const [isCartOpened, setCartOpened] = React.useState(false);
   const [searchValue, setSearchValue] = React.useState('');
+  const [total, setTotal] = React.useState(0);
 
   React.useEffect(() => {
     axios.get('https://60d4643061160900173cb128.mockapi.io/items').then((response) => {
@@ -17,6 +18,14 @@ function App() {
       setCartSneakers(response.data.filter((item) => item.isAddedToCart === true));
     });
   }, []);
+
+  React.useEffect(() => {
+    let sum = 0;
+    cartSneakers.forEach((item) => {
+      sum = sum + item.price;
+    });
+    setTotal(sum);
+  }, [cartSneakers]);
 
   const onOpenCart = () => {
     setCartOpened(true);
@@ -59,12 +68,13 @@ function App() {
     <div className="wrapper clear">
       {isCartOpened ? (
         <Cart
+          total={total}
           removeFromCart={removeFromCart}
           onCloseCart={onCloseCart}
           cartSneakers={cartSneakers}
         />
       ) : null}
-      <Header onOpenCart={onOpenCart} />
+      <Header total={total} onOpenCart={onOpenCart} />
       <div className="content p-40">
         <div className="d-flex align-center justify-between mb-40">
           <h1>{searchValue ? `Поиск по запросу: "${searchValue}"` : 'Все кроссовки'}</h1>

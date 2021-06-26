@@ -12,7 +12,7 @@ const Card = ({ id, title, price, img, isFavourite, isAddedToCart, onFavourite, 
       <div className="d-flex justify-between align-center">
         <div className="d-flex flex-column">
           <span>Цена:</span>
-          <b>{price} руб.</b>
+          <b>{new Intl.NumberFormat('ru-RU').format(price)} руб.</b>
         </div>
         <img
           className={styles.plus}
