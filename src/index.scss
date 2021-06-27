@@ -174,3 +174,19 @@ header {
     }
   }
 }
+
+.greenBtn--left {
+  img {
+    left: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    transition: all 0.15s ease-in-out;
+  }
+
+  &:hover {
+    img {
+      left: 20px;
+    }
+  }
+}

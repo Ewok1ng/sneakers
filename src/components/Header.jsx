@@ -15,6 +15,9 @@ const Header = ({ total, onOpenCart }) => {
           <img width={18} height={18} src="/img/cart.svg" alt="cart" />
           <span>{new Intl.NumberFormat('ru-RU').format(total)} руб.</span>
         </li>
+        <li className="cu-p mr-10">
+          <img width={18} height={18} src="/img/favourite.svg" alt="favourite" />
+        </li>
         <li className="cu-p">
           <img width={18} height={18} src="/img/user.svg" alt="user" />
         </li>
