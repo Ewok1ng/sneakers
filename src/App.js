@@ -8,6 +8,7 @@ import Card from './components/Card/Card';
 function App() {
   const [sneakers, setSneakers] = React.useState([]);
   const [cartSneakers, setCartSneakers] = React.useState([]);
+  const [favourite, setFavourite] = React.useState([]);
   const [isCartOpened, setCartOpened] = React.useState(false);
   const [searchValue, setSearchValue] = React.useState('');
   const [total, setTotal] = React.useState(0);
@@ -65,6 +66,33 @@ function App() {
     setSneakers(newSneakers);
   };
 
+  const onFavourite = (id) => {
+    const obj = sneakers.filter((item) => item.id === id)[0];
+    if (!obj.isFavourite) {
+      obj.isFavourite = true;
+      setFavourite((prev) => [...prev, obj]);
+      setSneakers((prev) => {
+        const index = prev.findIndex((item) => item.id === id);
+        const newArray = JSON.parse(JSON.stringify(sneakers));
+        newArray[index] = obj;
+        return newArray;
+      });
+      axios.put(`https://60d4643061160900173cb128.mockapi.io/items/${id}`, obj);
+    } else {
+      const newFavourite = cartSneakers.filter((item) => item.id !== id);
+      const newSneakers = JSON.parse(JSON.stringify(sneakers));
+      newSneakers.forEach((element) => {
+        if (element.id === id) {
+          element.isFavourite = false;
+          axios.put(`https://60d4643061160900173cb128.mockapi.io/items/${id}`, element);
+        }
+      });
+
+      setFavourite(newFavourite);
+      setSneakers(newSneakers);
+    }
+  };
+
   const onChangeInputValue = (event) => {
     setSearchValue(event.target.value);
   };
@@ -113,6 +141,7 @@ function App() {
                 price={item.price}
                 img={item.img}
                 isFavourite={item.isFavourite}
+                onFavourite={onFavourite}
                 isAddedToCart={item.isAddedToCart}
                 addToCart={addToCart}
               />
