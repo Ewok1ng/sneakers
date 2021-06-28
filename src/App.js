@@ -42,7 +42,12 @@ function App() {
 
     obj.isAddedToCart = true;
     setCartSneakers((prev) => [...prev, obj]);
-    setSneakers((prev) => [...prev, obj]);
+    setSneakers((prev) => {
+      const index = prev.findIndex((item) => item.id === id);
+      const newArray = JSON.parse(JSON.stringify(sneakers));
+      newArray[index] = obj;
+      return newArray;
+    });
     axios.put(`https://60d4643061160900173cb128.mockapi.io/items/${id}`, obj);
   };
 
